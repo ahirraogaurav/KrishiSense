@@ -1,0 +1,23 @@
+{% extends "advisor/base.html" %}{% block title %}Find my crop{% endblock %}
+{% block content %}
+<section class="wrap pad narrow">
+  <h1>Find my crop</h1>
+  <p class="lead">Move the sliders or type exact values. Not sure? Start from an example field.</p>
+  <div class="chips" id="presets">
+    <button type="button" data-p='{"N":80,"P":47,"K":40,"temperature":23,"humidity":82,"ph":6.4,"rainfall":236}'>🌾 Wet paddy land</button>
+    <button type="button" data-p='{"N":40,"P":68,"K":80,"temperature":19,"humidity":17,"ph":7.3,"rainfall":80}'>🌱 Dry pulse land</button>
+    <button type="button" data-p='{"N":100,"P":82,"K":50,"temperature":27,"humidity":80,"ph":6,"rainfall":105}'>🍌 Warm and humid</button>
+    <button type="button" data-p='{"N":20,"P":134,"K":200,"temperature":22,"humidity":92,"ph":5.9,"rainfall":113}'>🍎 Cool hill orchard</button>
+  </div>
+  <form method="post" class="card sliders" novalidate>{% csrf_token %}
+    {% for f in fields %}
+    <div class="slider"><label for="id_{{ f.name }}">{{ f.label }} <small>{{ f.unit }}</small></label>
+      <div class="srow"><input type="range" min="{{ f.min }}" max="{{ f.max }}" step="{{ f.step }}" value="{{ f.value }}" data-for="id_{{ f.name }}" aria-hidden="true" tabindex="-1">
+      <input class="input num" type="number" id="id_{{ f.name }}" name="{{ f.name }}" min="{{ f.min }}" max="{{ f.max }}" step="{{ f.step }}" value="{{ f.value }}" required></div>
+      {% for e in f.errors %}<p class="err">{{ e }}</p>{% endfor %}
+      <p class="help">{{ f.help }} Range {{ f.min }} to {{ f.max }}.</p></div>
+    {% endfor %}
+    <button class="btn full" type="submit">Recommend crops</button>
+  </form>
+</section>
+{% endblock %}

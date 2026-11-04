@@ -1,0 +1,35 @@
+{% extends "advisor/base.html" %}{% block title %}Home{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<section class="wrap pad">
+  <h1>Namaste, {{ user.username }}</h1>
+  <p class="lead">Enter your soil and weather readings to see which crops suit your field this season.</p>
+  <a class="btn" href="{% url 'predict' %}">Find my crop</a>
+  <div class="stats">
+    <div class="card stat"><b>{{ total }}</b><span>predictions made</span></div>
+    <div class="card stat">{% if favourite %}{% include "advisor/_icon.html" with c=favourite size="sm" %}<b>{{ favourite.name }}</b><span>most recommended for you</span>{% else %}<b>0</b><span>No predictions yet</span>{% endif %}</div>
+    <a class="card stat link" href="{% url 'crops' %}"><b>22</b><span>crops in the guide</span></a>
+  </div>
+  {% if recent %}<h2>Recent results</h2>
+  <div class="grid3">{% for p in recent %}
+    <a class="card rec" href="{% url 'result' p.pk %}">{% include "advisor/_icon.html" with c=p.c size="md" %}
+      <div><b>{{ p.c.name }}</b> <span class="hi">{{ p.c.hindi }}</span><br><small>{{ p.pct }}% confidence · {{ p.created|date:"d M Y" }}</small></div></a>
+  {% endfor %}</div>{% endif %}
+</section>
+{% else %}
+<section class="hero"><div class="wrap herogrid">
+  <div>
+    <h1>Know what to sow before the rains arrive</h1>
+    <p class="lead">Enter your soil nutrients, temperature, humidity, pH and rainfall. Kheti Mitra suggests the three crops that fit best and tells you how to look after them.</p>
+    <a class="btn gold" href="{% url 'signup' %}">Create a free account</a>
+    <a class="btn ghost" href="{% url 'login' %}">Log in</a>
+  </div>
+  <div class="tiles">{% for c in sample_crops %}<div class="tile t{{ forloop.counter }}">{% include "advisor/_icon.html" with c=c size="lg" %}<b>{{ c.name }}</b><span>{{ c.hindi }}</span></div>{% endfor %}</div>
+</div></section>
+<section class="wrap pad"><div class="grid3">
+  <div class="card"><h3>Tell us about your field</h3><p>Seven simple readings from your soil-test report and local weather. Sliders and examples make it quick on a phone.</p></div>
+  <div class="card"><h3>Get three crop matches</h3><p>See how confident the model is, plus season, water need, duration and a practical growing tip.</p></div>
+  <div class="card"><h3>Fix your soil</h3><p>Plain-language notes flag low nutrients, acidic or alkaline soil and drainage needs.</p></div>
+</div></section>
+{% endif %}
+{% endblock %}

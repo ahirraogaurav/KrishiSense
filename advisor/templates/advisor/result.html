@@ -1,0 +1,31 @@
+{% extends "advisor/base.html" %}{% block title %}{{ best.name }}{% endblock %}
+{% block content %}
+<section class="wrap pad">
+  <div class="resulthead card">
+    {% include "advisor/_icon.html" with c=best size="xl" %}
+    <div><p class="muted">Best match for your field</p>
+      <h1>{{ best.name }} <span class="hi">{{ best.hindi }}</span></h1>
+      <p>{{ best.tip }}</p>
+      <a class="btn small" href="{% url 'crop_detail' best.key %}">Read the crop guide</a></div>
+    <div class="ring" style="--p:{{ best.pct }}"><b>{{ best.pct }}%</b><span>confidence</span></div>
+  </div>
+  <div class="two">
+    <div class="card"><h2>Top three crops</h2>
+      {% for c in top %}<a class="bar" href="{% url 'crop_detail' c.key %}">{% include "advisor/_icon.html" with c=c size="sm" %}
+        <div class="barbody"><span><b>{{ c.name }}</b> <small>{{ c.season }} · {{ c.water }} water</small></span>
+        <div class="track"><i style="--w:{{ c.pct }}%"></i></div></div><em>{{ c.pct }}%</em></a>{% endfor %}
+      <p class="help">A low share for the first crop means several crops suit your field about equally well.</p>
+    </div>
+    <div class="card"><h2>Notes on your soil</h2>
+      <ul class="notes">{% for lvl, t in notes %}<li class="{{ lvl }}">{{ t }}</li>{% endfor %}</ul>
+    </div>
+  </div>
+  <div class="card facts"><h2>{{ best.name }} at a glance</h2>
+    <dl><div><dt>Season</dt><dd>{{ best.season }}</dd></div><div><dt>Duration</dt><dd>{{ best.duration }}</dd></div><div><dt>Water need</dt><dd>{{ best.water }}</dd></div></dl>
+  </div>
+  <div class="card"><h2>Readings you entered</h2>
+    <div class="readings">{% for label, unit, val in readings %}<span>{{ label }}<b>{{ val }} {{ unit }}</b></span>{% endfor %}</div>
+  </div>
+  <p><a class="btn" href="{% url 'predict' %}">Try new readings</a> <a class="btn ghostd" href="{% url 'history' %}">See history</a></p>
+</section>
+{% endblock %}

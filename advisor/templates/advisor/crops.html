@@ -1,0 +1,13 @@
+{% extends "advisor/base.html" %}{% block title %}Crop guide{% endblock %}
+{% block content %}
+<section class="wrap pad"><h1>Crop guide</h1>
+  <p class="lead">Season, water need and a growing tip for every crop the model can recommend.</p>
+  <div class="filters"><input class="input" id="q" type="search" placeholder="Search crops, e.g. rice or चावल">
+    <select class="input" id="season"><option value="">Any season</option><option>Kharif</option><option>Rabi</option><option>Zaid</option><option>Perennial</option></select>
+    <select class="input" id="water"><option value="">Any water need</option><option>Low</option><option>Medium</option><option>High</option></select></div>
+  <div class="grid4" id="cropgrid">{% for c in crops %}
+    <a class="card crop" href="{% url 'crop_detail' c.key %}" data-name="{{ c.name|lower }} {{ c.hindi }}" data-season="{{ c.season }}" data-water="{{ c.water }}">
+      {% include "advisor/_icon.html" with c=c size="lg" %}<b>{{ c.name }}</b><span class="hi">{{ c.hindi }}</span><small>{{ c.season }} · {{ c.water }} water</small></a>{% endfor %}</div>
+  <p class="empty" id="none" hidden>No crops match. Clear the search or filters.</p>
+</section>
+{% endblock %}

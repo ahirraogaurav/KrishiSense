@@ -1,0 +1,11 @@
+{% extends "advisor/base.html" %}{% block title %}{{ c.name }}{% endblock %}
+{% block content %}
+<section class="wrap pad narrow"><a href="{% url 'crops' %}">Back to crop guide</a>
+  <div class="card resulthead noring">{% include "advisor/_icon.html" with c=c size="xl" %}
+    <div><h1>{{ c.name }} <span class="hi">{{ c.hindi }}</span></h1><p>{{ c.tip }}</p></div></div>
+  <div class="card facts"><dl><div><dt>Season</dt><dd>{{ c.season }}</dd></div><div><dt>Duration</dt><dd>{{ c.duration }}</dd></div><div><dt>Water need</dt><dd>{{ c.water }}</dd></div></dl></div>
+  {% if user.is_authenticated %}<p>You have been recommended {{ c.name }} {{ used }} time{{ used|pluralize }}.</p>
+  <a class="btn" href="{% url 'predict' %}">Check if it suits my field</a>
+  {% else %}<a class="btn" href="{% url 'signup' %}">Sign up to check if it suits your field</a>{% endif %}
+</section>
+{% endblock %}

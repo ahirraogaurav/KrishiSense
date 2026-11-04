@@ -1,0 +1,15 @@
+{% extends "advisor/base.html" %}{% block title %}History{% endblock %}
+{% block content %}
+<section class="wrap pad narrow"><h1>Your past predictions</h1>
+<div class="histgrid">{% for p in items %}
+  <div class="card hist">
+    <a class="histmain" href="{% url 'result' p.pk %}">{% include "advisor/_icon.html" with c=p.c size="md" %}
+      <div><b>{{ p.c.name }}</b> <span class="hi">{{ p.c.hindi }}</span> <small>{{ p.pct }}%</small><br>
+      <small>{{ p.created|date:"d M Y, H:i" }} · N {{ p.N|floatformat:"-1" }}, P {{ p.P|floatformat:"-1" }}, K {{ p.K|floatformat:"-1" }}, pH {{ p.ph|floatformat:"-1" }}, {{ p.rainfall|floatformat:"-1" }} mm</small></div></a>
+    <form method="post" action="{% url 'delete_prediction' p.pk %}" onsubmit="return confirm('Delete this prediction?')">{% csrf_token %}<button class="btn small danger" type="submit">Delete</button></form>
+  </div>
+{% empty %}
+  <div class="card empty"><p>No predictions yet. Your results will appear here so you can compare seasons.</p><a class="btn" href="{% url 'predict' %}">Find my crop</a></div>
+{% endfor %}</div>
+</section>
+{% endblock %}
