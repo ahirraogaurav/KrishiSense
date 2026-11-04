@@ -156,9 +156,6 @@ The model file is a Python pickle. Only load pickle files you created or fully t
 
 ---
 
-## License
-
-_Add a license, e.g. MIT._
 
 ## Author
 
